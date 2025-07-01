@@ -15,7 +15,10 @@ pipeline {
         stage('Run Ansible') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-slave-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh 'ansible-playbook -i inventory.ini playbook.yml --private-key=$SSH_KEY'
+                    sh '''
+                        echo "Using SSH Key: $SSH_KEY"
+                        ansible-playbook -i inventory.ini playbook.yml --private-key=$SSH_KEY
+                    '''
                 }
             }
         }
