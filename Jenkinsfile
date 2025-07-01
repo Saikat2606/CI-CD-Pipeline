@@ -14,7 +14,9 @@ pipeline {
 
         stage('Run Ansible') {
             steps {
-                sh 'ansible-playbook -i inventory.ini playbook.yml --private-key=/home/ec2-user/.ssh/id_rsa'
+                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-slave-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh 'ansible-playbook -i inventory.ini playbook.yml --private-key=$SSH_KEY'
+                }
             }
         }
     }
